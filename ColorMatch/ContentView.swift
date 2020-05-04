@@ -10,7 +10,7 @@ import SwiftUI
 
 //declares the body of ContentView and fills out the contents
 struct ContentView: View {
-
+    
     @State var targetColor = randomColor()
     
     @State var guessColor = ColorObj(r: 0.5, g: 0.5, b: 0.5)
@@ -30,9 +30,8 @@ struct ContentView: View {
                 VStack {
                     Rectangle().foregroundColor(Color(red: guessColor.r, green: guessColor.g, blue: guessColor.b, opacity: 1.0))
                     HStack {
-                        Text("R: \(toHex(val: guessColor.r))")
-                        Text("G: \(toHex(val: guessColor.g))")
-                        Text("B: \(toHex(val: guessColor.b))")
+                        Text("Closeness: \(targetColor.computeCloseness(guess: guessColor))")
+              
                     }
                 }
             }.padding(.bottom)
@@ -40,30 +39,33 @@ struct ContentView: View {
                 Button(action: {
                     self.targetColor = randomColor()
                     
-                           }) {
-                               Text("New Color")
-                           }
-            Button(action: {
-                self.showAlert = true
-            }) {
-                Text("Score Me!")
-            }.alert(isPresented: $showAlert) {
-                Alert(title: Text("Your Score"), message: Text(targetColor.computeCloseness(guess: guessColor)))
-            }
-            }
+                }) {
+                    Text("New Color")
+                }.padding(.horizontal)
+                Button(action: {
+                    self.showAlert = true
+                }) {
+                    Text("Reveal Answer!")
+                }.alert(isPresented: $showAlert) {
+                    Alert(title: Text("Answer"), message: Text("R: \(toHex(val: targetColor.r))\n G: \(toHex(val: targetColor.g))\n B: \(toHex(val: targetColor.b))"))
+                }
+            }.padding(.bottom)
             VStack {
+                Text("\(toHex(val: guessColor.r))")
                 HStack {
                     Text("0")
                     //$ allows us to read from and write to rGuess
                     Slider(value: $guessColor.r).accentColor(.red)
                     Text("255")
                 }.padding()
+                 Text("\(toHex(val:guessColor.g))")
                 HStack {
                     Text("0")
                     //$ allows us to read from and write to rGuess
                     Slider(value: $guessColor.g).accentColor(.green)
                     Text("255")
                 }.padding()
+                 Text("\(toHex(val:guessColor.b))")
                 HStack {
                     Text("0")
                     //$ allows us to read from and write to rGuess
